@@ -46,7 +46,7 @@ int main()
 	memset(socketAddress.sin_zero, 0, sizeof(socketAddress.sin_zero));
 	
 	//INADDR_ANY: receive from all address. This is useful especially when the device has multiple NICs
-	socketAddress.sin_addr.s_addr = INADDR_ANY;
+	socketAddress.sin_addr.s_addr = htonl(INADDR_ANY);
 	//several other methods to set sin_addr is commented in step_1 _client.cpp
 
 	//bind. 

@@ -56,6 +56,7 @@ int main()
 	//inet_addr(ip) is deprecated. it could cause warning. 
 	//use InetPton instead or just ignore the warning. 
 	// - To use InetPton InetPton(addressFamily, serverIp, & socketAddress.sin_addr); (also include <WS2tcpip.h>)
+	// -- actually InetPton causes build error , and still couldn't figure out why.
 	// - To ignore the warning add #pragma warning(disable:4996)
 	
 	//ways to initialize socketAddress.sin_addr
