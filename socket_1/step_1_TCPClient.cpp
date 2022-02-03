@@ -88,9 +88,42 @@ int main()
 	}
 	cout << "sent message: " << sendMsg << endl;
 
+	//closing sockets
+	
+	//mehtod 1. insecure closing
+	//closesocket(clientSock);
+	
+	//mehtod 2. insecure closing
+	//recv failure happens(since, server socket has shutdown send stream)
+	//This recv will return 0(since by the time this code is excuted server has shutdown its socket), 
+	//and it is as intended. so 'if statement' should be used if it works correctly
+	int finRecvError = recv(clientSock, recvMsg, recvBuflen, 0);
+	//BEWARE: finRecvError ==0(not -1) when remote host has shutdown send stream.
+	if(finRecvError==0)
+	{
+		cout << "disconnect by server" << endl;
 
-	closesocket(clientSock);
+		//initialize buffer
+		memset(sendMsg, '\0', sendBuflen);
+		cout << "send: ";
+		cin.getline(sendMsg, sendBuflen);
 
+		int finSendError = send(clientSock, sendMsg, sendBuflen, 0);
+		if(finSendError ==-1) //Should this error occur, it is not intended one.
+		{
+			cout << WSAGetLastError() << endl;
+			cout << "final send error" << endl;
+			getchar();
+			return -1;
+		}
+		cout << "sent final message: " << sendMsg<<endl;
+		closesocket(clientSock);
+	}
+	else
+	{
+		//unintended case
+		cout << "server not yet disconnected" << endl;
+	}
 	WSACleanup();
 	getchar();
 }

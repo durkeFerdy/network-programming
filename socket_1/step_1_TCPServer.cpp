@@ -105,9 +105,42 @@ int main()
 	cout << "received message: " << recvMsg << endl;
 
 
-	//both listening socket and all connected sockets(in this case there's only one) should be closed
+	//closing sockets
+	//both listening socket and all connected sockets(in this case there's only one) should be closed when both will not be used anymore
+
+	//mehtod 1. insecure closing
+	/*
 	closesocket(listenSock);
 	closesocket(connectedSock);
+	*/
+
+	//method 2. secure closing 
+	//let this TCPServer initiate disconnection.(Client also can be initiator)
+	//shutdown of listening socket is unnecessary, if not end of the program, and some case should be avoided
+	//For instance, to connect other clients, listening socket should remain without shutdown or close
+	
+	//shutdown send stream not recv stream
+	shutdown(connectedSock,SD_SEND);
+
+	//reset recvMsg
+	memset(recvMsg, '\0', recvBuflen);
+	//recv remaining data.
+	//remaining data can be data that arrived after shutdown.
+	//in this case(inpractical case for learning purpose only) the data from host is just data that was sent after recv fails.
+	int finalRecvError =recv(connectedSock, recvMsg, recvBuflen, 0);
+	if(finalRecvError==-1)
+	{
+		cout << WSAGetLastError() << endl;
+		cout << "recv error" << endl;
+		getchar();
+		return -1;
+	}
+	cout << "received message: " << recvMsg << endl;
+
+	//close socket
+	closesocket(listenSock);
+	closesocket(connectedSock);
+
 
 	WSACleanup();
 	getchar();

@@ -98,7 +98,7 @@ int main()
 
 	cout << "sent:" << sendMessage << endl;
 
-	//shutdown & close socket 
+	//close socket 
 	int closesocketError = closesocket(sockUDP);
 
 	//end using winsock2 library
