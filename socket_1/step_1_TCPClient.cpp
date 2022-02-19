@@ -29,6 +29,7 @@ int main()
 	{
 		cout << WSAGetLastError() << endl;
 		cout << "invalid socket error" << endl;
+		WSACleanup();
 		getchar();
 		return -1;
 	}
@@ -53,6 +54,7 @@ int main()
 	{
 		cout << WSAGetLastError() << endl;
 		cout << "connect error" << endl;
+		WSACleanup();
 		getchar();
 		return -1;
 	}
@@ -66,6 +68,7 @@ int main()
 	{
 		cout << WSAGetLastError() << endl;
 		cout << "recv error" << endl;
+		WSACleanup();
 		getchar();
 		return -1;
 	}
